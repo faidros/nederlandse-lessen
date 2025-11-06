@@ -4,7 +4,7 @@ define('DB_USERS', __DIR__ . '/database/users.db');
 define('DB_LANGUAGES', __DIR__ . '/database/languages.db');
 
 // Site configuration
-define('SITE_NAME', 'Nederlandse Lessen');
+define('SITE_NAME', 'Beyond');
 define('BASE_URL', '/');
 
 // Session configuration

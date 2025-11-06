@@ -12,7 +12,7 @@ include 'includes/header.php';
 <div class="hero">
     <div class="container">
         <div class="hero-content">
-            <h1>Lär dig språk - nederländska & Esperanto</h1>
+            <h1>Beyond - Lär dig språk</h1>
             <p class="hero-subtitle">Gratis, roligt och effektivt språklärande</p>
             <div class="hero-features">
                 <div class="feature">
