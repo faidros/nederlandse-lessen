@@ -715,6 +715,57 @@ body {
     outline: none;
 }
 
+/* Explanation Exercise Styles */
+.explanation-card {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.explanation-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.explanation-box h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.3rem;
+}
+
+.explanation-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.example-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.example-box strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.example-box em {
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.quiz-question {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
 .feedback {
     margin-top: 1.5rem;
     padding: 1rem;

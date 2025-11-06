@@ -107,6 +107,9 @@ function loadExercise(index) {
         case 'fill_blank':
             html = createFillBlank(exercise, data);
             break;
+        case 'explanation':
+            html = createExplanation(exercise, data);
+            break;
     }
     
     exerciseArea.innerHTML = html;
@@ -186,6 +189,29 @@ function createFillBlank(exercise, data) {
             <h2 class="exercise-question">${exercise.question}</h2>
             <div class="fill-blank-sentence">${sentenceWithBlank}</div>
             <button class="btn btn-primary" onclick="checkFillBlank('${data.correct.replace(/'/g, "\\'")}')">Kontrollera</button>
+            <div id="feedback" class="feedback"></div>
+        </div>
+    `;
+}
+
+function createExplanation(exercise, data) {
+    return `
+        <div class="exercise-card explanation-card">
+            <h2 class="exercise-question">${exercise.question}</h2>
+            <div class="explanation-box">
+                <h3>📚 Förklaring</h3>
+                <p class="explanation-text">${data.explanation}</p>
+                <div class="example-box">
+                    <strong>Exempel:</strong> <em>${data.example}</em>
+                </div>
+            </div>
+            <hr style="margin: 20px 0; border: none; border-top: 2px solid #e0e0e0;">
+            <h3 class="quiz-question">${data.question}</h3>
+            <div class="options-grid">
+                ${data.options.map((option, i) => `
+                    <button class="option-btn" onclick="checkMultipleChoice(${i}, ${data.correct})">${option}</button>
+                `).join('')}
+            </div>
             <div id="feedback" class="feedback"></div>
         </div>
     `;
