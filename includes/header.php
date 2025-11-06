@@ -21,14 +21,15 @@
                 <?php if (isLoggedIn()): 
                     $user = getCurrentUser();
                     $db = getUserDB();
-                    $stmt = $db->prepare("SELECT total_lessons_completed FROM user_stats WHERE user_id = ?");
+                    // Get total lessons completed across all languages
+                    $stmt = $db->prepare("SELECT SUM(lessons_completed) as total FROM user_stats WHERE user_id = ?");
                     $stmt->execute([$user['id']]);
                     $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                 ?>
                     <div class="user-stats">
                         <span class="stat-item">
                             <span class="stat-icon">🏆</span>
-                            <span class="stat-value"><?php echo $stats['total_lessons_completed'] ?? 0; ?></span>
+                            <span class="stat-value"><?php echo $stats['total'] ?? 0; ?></span>
                         </span>
                     </div>
                     <div class="user-menu">

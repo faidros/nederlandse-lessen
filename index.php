@@ -25,11 +25,11 @@ include 'includes/header.php';
                 </div>
                 <div class="feature">
                     <span class="feature-icon">📚</span>
-                    <span>80 lektioner</span>
+                    <span>95 lektioner</span>
                 </div>
                 <div class="feature">
                     <span class="feature-icon">✨</span>
-                    <span>400 övningar</span>
+                    <span>475 övningar</span>
                 </div>
             </div>
             <div class="hero-cta">
