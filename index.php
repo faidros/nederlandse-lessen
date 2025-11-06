@@ -21,15 +21,15 @@ include 'includes/header.php';
                 </div>
                 <div class="feature">
                     <span class="feature-icon">🌍</span>
-                    <span>Esperanto A2</span>
+                    <span>Esperanto A2-B1</span>
                 </div>
                 <div class="feature">
                     <span class="feature-icon">📚</span>
-                    <span>95 lektioner</span>
+                    <span>115 lektioner</span>
                 </div>
                 <div class="feature">
                     <span class="feature-icon">✨</span>
-                    <span>475 övningar</span>
+                    <span>575 övningar</span>
                 </div>
             </div>
             <div class="hero-cta">
