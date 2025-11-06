@@ -12,24 +12,24 @@ include 'includes/header.php';
 <div class="hero">
     <div class="container">
         <div class="hero-content">
-            <h1>Lär dig nederländska på B1-nivå</h1>
+            <h1>Lär dig språk - nederländska & Esperanto</h1>
             <p class="hero-subtitle">Gratis, roligt och effektivt språklärande</p>
             <div class="hero-features">
                 <div class="feature">
+                    <span class="feature-icon">🇳🇱</span>
+                    <span>Nederländska B1</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🌍</span>
+                    <span>Esperanto A2</span>
+                </div>
+                <div class="feature">
                     <span class="feature-icon">📚</span>
-                    <span>60 lektioner</span>
+                    <span>80 lektioner</span>
                 </div>
                 <div class="feature">
                     <span class="feature-icon">✨</span>
-                    <span>300 övningar</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">🎯</span>
-                    <span>B1-nivå</span>
-                </div>
-                <div class="feature">
-                    <span class="feature-icon">📱</span>
-                    <span>Mobilanpassad</span>
+                    <span>400 övningar</span>
                 </div>
             </div>
             <div class="hero-cta">
@@ -38,7 +38,35 @@ include 'includes/header.php';
             </div>
         </div>
         <div class="hero-image">
-            <div class="mascot">🇳🇱</div>
+            <div class="mascot">�</div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <h2>Varför välja våra språklektioner?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon">✍️</div>
+                <h3>Varierade övningar</h3>
+                <p>Flervalsfrågor, översättningar, matchning, ordbyggnad och idiom med förklaringar</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">📊</div>
+                <h3>Följ din framsteg</h3>
+                <p>Se hur många lektioner du har slutfört och ditt resultat för varje språk</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">�</div>
+                <h3>Tematiska lektioner</h3>
+                <p>Idiomatiska uttryck, grammatik och verkliga situationer som resande, shopping, jobb</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">💡</div>
+                <h3>Hjälp när du behöver</h3>
+                <p>Använd ledtrådsknappar, få förklaringar när du svarar fel och lär dig av misstag</p>
+            </div>
         </div>
     </div>
 </div>

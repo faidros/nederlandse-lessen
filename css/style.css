@@ -378,6 +378,62 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* Language Switcher */
+.language-switcher {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.language-switcher h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.language-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.language-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-light);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.language-btn:hover {
+    background: #fff;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.language-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.language-flag {
+    font-size: 2rem;
+}
+
+.language-name {
+    font-size: 1.1rem;
+}
+
 .stats-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
