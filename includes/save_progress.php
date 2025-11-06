@@ -42,10 +42,10 @@ try {
         $stmt = $db_users->prepare("UPDATE user_progress SET score = ?, completed = ?, completed_at = CURRENT_TIMESTAMP WHERE id = ?");
         $stmt->execute([$score, $completed, $existing['id']]);
         
-        // If newly completed, update stats
+        // If newly completed, update stats for this language
         if ($completed && !$existing['completed']) {
-            $stmt = $db_users->prepare("UPDATE user_stats SET total_lessons_completed = total_lessons_completed + 1, last_activity_date = DATE('now') WHERE user_id = ?");
-            $stmt->execute([$user_id]);
+            $stmt = $db_users->prepare("UPDATE user_stats SET lessons_completed = lessons_completed + 1, last_activity_date = DATE('now') WHERE user_id = ? AND language_id = ?");
+            $stmt->execute([$user_id, $lesson['language_id']]);
         }
     } else {
         // Insert new progress
@@ -54,8 +54,8 @@ try {
         
         // Update stats if completed
         if ($completed) {
-            $stmt = $db_users->prepare("UPDATE user_stats SET total_lessons_completed = total_lessons_completed + 1, last_activity_date = DATE('now') WHERE user_id = ?");
-            $stmt->execute([$user_id]);
+            $stmt = $db_users->prepare("UPDATE user_stats SET lessons_completed = lessons_completed + 1, last_activity_date = DATE('now') WHERE user_id = ? AND language_id = ?");
+            $stmt->execute([$user_id, $lesson['language_id']]);
         }
     }
     
