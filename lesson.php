@@ -124,6 +124,7 @@ function createMultipleChoice(exercise, data) {
                     <button class="option-btn" onclick="checkMultipleChoice(${i}, ${data.correct})">${option}</button>
                 `).join('')}
             </div>
+            <button class="hint-btn" onclick="showHint('multiple_choice', ${data.correct}, ${JSON.stringify(data.options).replace(/"/g, '&quot;')})">💡 Jag behöver hjälp</button>
             <div id="feedback" class="feedback"></div>
         </div>
     `;
@@ -137,6 +138,7 @@ function createTranslation(exercise, data) {
                 <input type="text" id="translationInput" class="text-input" placeholder="Skriv din översättning här...">
                 <button class="btn btn-primary" onclick="checkTranslation('${data.correct.replace(/'/g, "\\'")}')">Kontrollera</button>
             </div>
+            <button class="hint-btn" onclick="showHint('translation', '${data.correct.replace(/'/g, "\\'")}')">💡 Jag behöver hjälp</button>
             <div id="feedback" class="feedback"></div>
         </div>
     `;
@@ -177,6 +179,7 @@ function createWordOrder(exercise, data) {
             </div>
             <div class="sentence-area" id="sentenceArea"></div>
             <button class="btn btn-primary" onclick="checkWordOrder('${data.correct.replace(/'/g, "\\'")}')">Kontrollera</button>
+            <button class="hint-btn" onclick="showHint('word_order', '${data.correct.replace(/'/g, "\\'")}')">💡 Jag behöver hjälp</button>
             <div id="feedback" class="feedback"></div>
         </div>
     `;
@@ -189,6 +192,7 @@ function createFillBlank(exercise, data) {
             <h2 class="exercise-question">${exercise.question}</h2>
             <div class="fill-blank-sentence">${sentenceWithBlank}</div>
             <button class="btn btn-primary" onclick="checkFillBlank('${data.correct.replace(/'/g, "\\'")}')">Kontrollera</button>
+            <button class="hint-btn" onclick="showHint('fill_blank', '${data.correct.replace(/'/g, "\\'")}')">💡 Jag behöver hjälp</button>
             <div id="feedback" class="feedback"></div>
         </div>
     `;
@@ -468,6 +472,56 @@ function closeExplanationAndContinue() {
     }
     currentExerciseIndex++;
     loadExercise(currentExerciseIndex);
+}
+
+function showHint(exerciseType, correctAnswer, options = null) {
+    let hintText = '';
+    
+    switch(exerciseType) {
+        case 'multiple_choice':
+            // Show which option is correct (by number)
+            const correctIndex = parseInt(correctAnswer);
+            hintText = `Ledtråd: Det rätta svaret är alternativ nummer ${correctIndex + 1}.`;
+            break;
+            
+        case 'translation':
+            // Show first half of the answer
+            const answers = correctAnswer.split('|');
+            const mainAnswer = answers[0];
+            const halfLength = Math.ceil(mainAnswer.length / 2);
+            const hint = mainAnswer.substring(0, halfLength);
+            hintText = `Ledtråd: Svaret börjar med "${hint}..."`;
+            if (answers.length > 1) {
+                hintText += `\n\nDet finns flera möjliga svar.`;
+            }
+            break;
+            
+        case 'word_order':
+            // Show first 2-3 words
+            const words = correctAnswer.split(' ');
+            const firstWords = words.slice(0, Math.min(3, words.length));
+            hintText = `Ledtråd: Meningen börjar med: "${firstWords.join(' ')}..."`;
+            break;
+            
+        case 'fill_blank':
+            // Show first 2-3 letters and word length
+            const blankAnswers = correctAnswer.split('|');
+            const blankMain = blankAnswers[0];
+            const blankHint = blankMain.substring(0, Math.min(3, blankMain.length));
+            hintText = `Ledtråd: Ordet börjar med "${blankHint}..." och är ${blankMain.length} bokstäver långt.`;
+            if (blankAnswers.length > 1) {
+                hintText += `\n\nDet finns flera möjliga svar.`;
+            }
+            break;
+    }
+    
+    showFeedback(false, hintText);
+    
+    // Hide hint button after use
+    const hintBtn = document.querySelector('.hint-btn');
+    if (hintBtn) {
+        hintBtn.style.display = 'none';
+    }
 }
 
 async function showResults() {
