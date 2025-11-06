@@ -67,6 +67,14 @@ let correctAnswersCount = 0;
 let currentAttempts = 0;
 let currentCorrectAnswer = null;
 
+// Helper function to normalize text for comparison (remove punctuation, lowercase, trim)
+function normalizeText(text) {
+    return text.toLowerCase()
+        .trim()
+        .replace(/[.,!?;:"""'']/g, '')
+        .replace(/\s+/g, ' ');
+}
+
 function loadExercise(index) {
     console.log('=== Loading exercise ===');
     console.log('Index:', index, 'Total:', lessonData.totalExercises);
@@ -280,8 +288,8 @@ function checkMultipleChoice(selected, correct) {
 
 function checkTranslation(correct) {
     const input = document.getElementById('translationInput');
-    const userAnswer = input.value.trim().toLowerCase();
-    const acceptedAnswers = correct.toLowerCase().split('|').map(a => a.trim());
+    const userAnswer = normalizeText(input.value);
+    const acceptedAnswers = correct.split('|').map(a => normalizeText(a));
     const isCorrect = acceptedAnswers.includes(userAnswer);
     
     if (isCorrect) {
@@ -351,8 +359,8 @@ function addWord(word, btn) {
 }
 
 function checkWordOrder(correct) {
-    const userSentence = sentenceWords.join(' ').toLowerCase();
-    const correctSentence = correct.toLowerCase();
+    const userSentence = normalizeText(sentenceWords.join(' '));
+    const correctSentence = normalizeText(correct);
     const isCorrect = userSentence === correctSentence;
     
     if (isCorrect) {
@@ -397,8 +405,8 @@ function checkWordOrder(correct) {
 
 function checkFillBlank(correct) {
     const input = document.getElementById('blankInput');
-    const userAnswer = input.value.trim().toLowerCase();
-    const acceptedAnswers = correct.toLowerCase().split('|').map(a => a.trim());
+    const userAnswer = normalizeText(input.value);
+    const acceptedAnswers = correct.split('|').map(a => normalizeText(a));
     const isCorrect = acceptedAnswers.includes(userAnswer);
     
     if (isCorrect) {
