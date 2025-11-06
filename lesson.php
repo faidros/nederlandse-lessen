@@ -255,12 +255,21 @@ function checkMultipleChoice(selected, correct) {
                 loadExercise(currentExerciseIndex);
             }, 2000);
         } else {
-            // Show hint and move on
-            showFeedback(false, 'Rätt svar var alternativ ' + (parseInt(correct) + 1) + '. Fortsätter till nästa övning...');
+            // Get current exercise data for explanation
+            const exercise = lessonData.exercises[currentExerciseIndex];
+            const data = JSON.parse(exercise.data);
+            const correctAnswerText = data.options[correct];
+            let explanation = `Det rätta svaret var "${correctAnswerText}".`;
+            
+            // Add explanation if it's an explanation-type exercise
+            if (data.explanation) {
+                explanation = data.explanation;
+            }
+            
+            showFeedback(false, 'Tyvärr inte rätt...');
             setTimeout(() => {
-                currentExerciseIndex++;
-                loadExercise(currentExerciseIndex);
-            }, 3000);
+                showExplanationModal(correctAnswerText, explanation);
+            }, 1500);
         }
     }
 }
@@ -287,24 +296,23 @@ function checkTranslation(correct) {
             showFeedback(false, 'Inte riktigt. Försök igen!');
             input.value = '';
             input.focus();
-        } else {
+        } else if (currentAttempts === 2) {
             // Show hint - first letter(s)
             const hint = currentCorrectAnswer.substring(0, Math.ceil(currentCorrectAnswer.length / 3));
             showFeedback(false, `Ledtråd: Börjar med "${hint}..."`);
             input.value = '';
             input.focus();
+        } else {
+            // After third attempt, show explanation modal
+            const exercise = lessonData.exercises[currentExerciseIndex];
+            const allAcceptedAnswers = acceptedAnswers.join(' / ');
+            const explanation = `Möjliga översättningar: ${allAcceptedAnswers}`;
             
-            // After third attempt, show answer and move on
-            if (currentAttempts >= 3) {
-                setTimeout(() => {
-                    showFeedback(false, `Rätt svar: ${currentCorrectAnswer}. Fortsätter...`);
-                    input.disabled = true;
-                    setTimeout(() => {
-                        currentExerciseIndex++;
-                        loadExercise(currentExerciseIndex);
-                    }, 2500);
-                }, 2000);
-            }
+            input.disabled = true;
+            showFeedback(false, 'Tyvärr inte rätt...');
+            setTimeout(() => {
+                showExplanationModal(allAcceptedAnswers, explanation);
+            }, 1500);
         }
     }
 }
@@ -373,12 +381,12 @@ function checkWordOrder(correct) {
             });
             document.getElementById('sentenceArea').innerHTML = '';
         } else {
-            // Show answer and move on
-            showFeedback(false, `Rätt ordning: ${correct}`);
+            // Show explanation modal
+            const explanation = `Den rätta ordningen är: "${correct}"`;
+            showFeedback(false, 'Tyvärr inte rätt...');
             setTimeout(() => {
-                currentExerciseIndex++;
-                loadExercise(currentExerciseIndex);
-            }, 3000);
+                showExplanationModal(correct, explanation);
+            }, 1500);
         }
     }
 }
@@ -412,13 +420,15 @@ function checkFillBlank(correct) {
             input.value = '';
             input.focus();
         } else {
-            // Show answer and move on
-            showFeedback(false, `Rätt svar: ${currentCorrectAnswer}`);
+            // Show explanation modal
+            const allAcceptedAnswers = acceptedAnswers.join(' / ');
+            const explanation = `Möjliga svar: ${allAcceptedAnswers}`;
+            
             input.disabled = true;
+            showFeedback(false, 'Tyvärr inte rätt...');
             setTimeout(() => {
-                currentExerciseIndex++;
-                loadExercise(currentExerciseIndex);
-            }, 2500);
+                showExplanationModal(allAcceptedAnswers, explanation);
+            }, 1500);
         }
     }
 }
@@ -428,6 +438,36 @@ function showFeedback(isCorrect, message) {
     feedback.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
     feedback.textContent = message;
     feedback.style.display = 'block';
+}
+
+function showExplanationModal(correctAnswer, explanation) {
+    const modal = document.createElement('div');
+    modal.className = 'explanation-modal';
+    modal.innerHTML = `
+        <div class="explanation-modal-content">
+            <h2>📖 Rätt svar</h2>
+            <div class="correct-answer-box">
+                <strong>Rätt svar:</strong> ${correctAnswer}
+            </div>
+            ${explanation ? `
+                <div class="explanation-text-box">
+                    <strong>Förklaring:</strong>
+                    <p>${explanation}</p>
+                </div>
+            ` : ''}
+            <button class="btn btn-primary" onclick="closeExplanationAndContinue()">OK, jag förstår! →</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function closeExplanationAndContinue() {
+    const modal = document.querySelector('.explanation-modal');
+    if (modal) {
+        modal.remove();
+    }
+    currentExerciseIndex++;
+    loadExercise(currentExerciseIndex);
 }
 
 async function showResults() {
