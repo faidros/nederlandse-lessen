@@ -57,9 +57,14 @@ try {
     
     $user_id = $db->lastInsertId();
     
-    // Initialize user stats
-    $stmt = $db->prepare("INSERT INTO user_stats (user_id) VALUES (?)");
-    $stmt->execute([$user_id]);
+    // Initialize user stats for all available languages
+    $db_lang = getLanguageDB();
+    $languages = $db_lang->query("SELECT id FROM languages WHERE active = 1")->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach ($languages as $lang) {
+        $stmt = $db->prepare("INSERT INTO user_stats (user_id, language_id) VALUES (?, ?)");
+        $stmt->execute([$user_id, $lang['id']]);
+    }
     
     // Log user in
     $_SESSION['user_id'] = $user_id;
