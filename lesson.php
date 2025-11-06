@@ -68,14 +68,19 @@ let currentAttempts = 0;
 let currentCorrectAnswer = null;
 
 function loadExercise(index) {
+    console.log('=== Loading exercise ===');
+    console.log('Index:', index, 'Total:', lessonData.totalExercises);
+    
     currentAttempts = 0;
     currentCorrectAnswer = null;
     if (index >= lessonData.exercises.length) {
+        console.log('All exercises completed! Showing results...');
         showResults();
         return;
     }
     
     const exercise = lessonData.exercises[index];
+    console.log('Loading exercise type:', exercise.type);
     const data = JSON.parse(exercise.data);
     const exerciseArea = document.getElementById('exerciseArea');
     
@@ -113,9 +118,10 @@ function createMultipleChoice(exercise, data) {
             <h2 class="exercise-question">${exercise.question}</h2>
             <div class="options-grid">
                 ${data.options.map((option, i) => `
-                    <button class="option-btn" onclick="checkMultipleChoice(${i}, '${data.correct}')">${option}</button>
+                    <button class="option-btn" onclick="checkMultipleChoice(${i}, ${data.correct})">${option}</button>
                 `).join('')}
             </div>
+            <div id="feedback" class="feedback"></div>
         </div>
     `;
 }
@@ -186,12 +192,17 @@ function createFillBlank(exercise, data) {
 }
 
 function checkMultipleChoice(selected, correct) {
+    console.log('Selected:', selected, 'Type:', typeof selected);
+    console.log('Correct:', correct, 'Type:', typeof correct);
+    
     const buttons = document.querySelectorAll('.option-btn');
-    const isCorrect = selected.toString() === correct;
+    const isCorrect = selected.toString() === correct.toString();
+    
+    console.log('Is correct?', isCorrect);
     
     buttons.forEach((btn, i) => {
         btn.disabled = true;
-        if (i.toString() === correct) {
+        if (i.toString() === correct.toString()) {
             btn.classList.add('correct');
         } else if (i === selected && !isCorrect) {
             btn.classList.add('incorrect');
@@ -200,9 +211,13 @@ function checkMultipleChoice(selected, correct) {
     
     if (isCorrect) {
         correctAnswersCount++;
+        console.log('Answer is correct! Moving to next exercise...');
+        console.log('Current index:', currentExerciseIndex);
+        console.log('Total exercises:', lessonData.totalExercises);
         showFeedback(true, 'Rätt! 🎉');
         setTimeout(() => {
             currentExerciseIndex++;
+            console.log('New index:', currentExerciseIndex);
             loadExercise(currentExerciseIndex);
         }, 1500);
     } else {
@@ -227,8 +242,8 @@ function checkMultipleChoice(selected, correct) {
 function checkTranslation(correct) {
     const input = document.getElementById('translationInput');
     const userAnswer = input.value.trim().toLowerCase();
-    const correctAnswers = correct.toLowerCase().split('|').map(a => a.trim());
-    const isCorrect = correctAnswers.includes(userAnswer);
+    const acceptedAnswers = correct.toLowerCase().split('|').map(a => a.trim());
+    const isCorrect = acceptedAnswers.includes(userAnswer);
     
     if (isCorrect) {
         correctAnswersCount++;
@@ -240,7 +255,7 @@ function checkTranslation(correct) {
         }, 1500);
     } else {
         currentAttempts++;
-        currentCorrectAnswer = correctAnswers[0];
+        currentCorrectAnswer = acceptedAnswers[0];
         
         if (currentAttempts === 1) {
             showFeedback(false, 'Inte riktigt. Försök igen!');
@@ -345,8 +360,8 @@ function checkWordOrder(correct) {
 function checkFillBlank(correct) {
     const input = document.getElementById('blankInput');
     const userAnswer = input.value.trim().toLowerCase();
-    const correctAnswers = correct.toLowerCase().split('|').map(a => a.trim());
-    const isCorrect = correctAnswers.includes(userAnswer);
+    const acceptedAnswers = correct.toLowerCase().split('|').map(a => a.trim());
+    const isCorrect = acceptedAnswers.includes(userAnswer);
     
     if (isCorrect) {
         correctAnswersCount++;
@@ -358,7 +373,7 @@ function checkFillBlank(correct) {
         }, 1500);
     } else {
         currentAttempts++;
-        currentCorrectAnswer = correctAnswers[0];
+        currentCorrectAnswer = acceptedAnswers[0];
         
         if (currentAttempts === 1) {
             showFeedback(false, 'Inte rätt. Försök igen!');
