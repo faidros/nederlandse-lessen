@@ -24,12 +24,16 @@ include 'includes/header.php';
                     <span>Esperanto A2-B1</span>
                 </div>
                 <div class="feature">
+                    <span class="feature-icon">🇸🇦</span>
+                    <span>Arabiska A2</span>
+                </div>
+                <div class="feature">
                     <span class="feature-icon">📚</span>
-                    <span>115 lektioner</span>
+                    <span>170 lektioner</span>
                 </div>
                 <div class="feature">
                     <span class="feature-icon">✨</span>
-                    <span>575 övningar</span>
+                    <span>850 övningar</span>
                 </div>
             </div>
             <div class="hero-cta">
