@@ -1,7 +1,7 @@
     </main>
     <footer class="footer">
         <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. Lär dig nederländska på B1-nivå.</p>
+            <p>&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>.</p>
         </div>
     </footer>
     <script src="js/main.js"></script>
