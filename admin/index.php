@@ -33,16 +33,33 @@ $stmt = $db_users->query("
 ");
 $active_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Lesson statistics
-$stmt = $db_users->query("
-    SELECT l.title, COUNT(DISTINCT up.user_id) as completions, AVG(up.score) as avg_score
-    FROM lessons l
-    LEFT JOIN user_progress up ON l.id = up.lesson_id AND up.completed = 1
-    GROUP BY l.id
-    ORDER BY completions DESC
-    LIMIT 10
-");
-$popular_lessons = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Lesson statistics - need to manually combine data from both databases
+$all_lessons = $db_lang->query("SELECT id, title FROM lessons")->fetchAll(PDO::FETCH_ASSOC);
+$popular_lessons = [];
+
+foreach ($all_lessons as $lesson) {
+    $stmt = $db_users->prepare("
+        SELECT COUNT(DISTINCT user_id) as completions, AVG(score) as avg_score
+        FROM user_progress 
+        WHERE lesson_id = ? AND completed = 1
+    ");
+    $stmt->execute([$lesson['id']]);
+    $stats = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($stats['completions'] > 0) {
+        $popular_lessons[] = [
+            'title' => $lesson['title'],
+            'completions' => $stats['completions'],
+            'avg_score' => $stats['avg_score']
+        ];
+    }
+}
+
+// Sort by completions and take top 10
+usort($popular_lessons, function($a, $b) {
+    return $b['completions'] - $a['completions'];
+});
+$popular_lessons = array_slice($popular_lessons, 0, 10);
 
 $page_title = 'Admin Dashboard - ' . SITE_NAME;
 include '../includes/header.php';
