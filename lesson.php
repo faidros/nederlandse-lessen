@@ -49,7 +49,7 @@ include 'includes/header.php';
     </div>
     
     <div class="exercise-area" id="exerciseArea">
-        <!-- Exercises will be loaded here via JavaScript -->
+        <!-- Theory or exercises will be loaded here via JavaScript -->
     </div>
 </div>
 
@@ -59,13 +59,27 @@ const lessonData = {
     exercises: <?php echo json_encode($exercises); ?>,
     totalExercises: <?php echo count($exercises); ?>,
     currentExercise: 0,
-    correctAnswers: 0
+    correctAnswers: 0,
+    hasTheory: <?php echo !empty($lesson['theory_content']) ? 'true' : 'false'; ?>,
+    theoryContent: <?php 
+        if (!empty($lesson['theory_content'])) {
+            $theory = json_decode($lesson['theory_content'], true);
+            if ($theory && isset($theory['content'])) {
+                echo json_encode($theory['content']);
+            } else {
+                echo json_encode('');
+            }
+        } else {
+            echo json_encode('');
+        }
+    ?>
 };
 
 let currentExerciseIndex = 0;
 let correctAnswersCount = 0;
 let currentAttempts = 0;
 let currentCorrectAnswer = null;
+let theoryShown = false;
 
 // Helper function to normalize text for comparison (remove punctuation, lowercase, trim)
 function normalizeText(text) {
@@ -73,6 +87,49 @@ function normalizeText(text) {
         .trim()
         .replace(/[.,!?;:"""'']/g, '')
         .replace(/\s+/g, ' ');
+}
+
+function showTheory() {
+    if (!lessonData.hasTheory || !lessonData.theoryContent) {
+        // No theory, go straight to exercises
+        loadExercise(0);
+        return;
+    }
+    
+    const exerciseArea = document.getElementById('exerciseArea');
+    const theoryCard = document.createElement('div');
+    theoryCard.className = 'theory-card';
+    
+    const theoryHeader = document.createElement('div');
+    theoryHeader.className = 'theory-header';
+    theoryHeader.innerHTML = `
+        <h2>📚 Föreläsning</h2>
+        <p class="theory-subtitle">Läs igenom materialet innan du börjar med övningarna</p>
+    `;
+    
+    const theoryContent = document.createElement('div');
+    theoryContent.className = 'theory-content';
+    theoryContent.innerHTML = lessonData.theoryContent;
+    
+    const theoryFooter = document.createElement('div');
+    theoryFooter.className = 'theory-footer';
+    theoryFooter.innerHTML = `
+        <button class="btn btn-primary btn-large" onclick="startExercises()">
+            Jag har läst klart - Börja med övningarna →
+        </button>
+    `;
+    
+    theoryCard.appendChild(theoryHeader);
+    theoryCard.appendChild(theoryContent);
+    theoryCard.appendChild(theoryFooter);
+    
+    exerciseArea.innerHTML = '';
+    exerciseArea.appendChild(theoryCard);
+    theoryShown = true;
+}
+
+function startExercises() {
+    loadExercise(0);
 }
 
 function loadExercise(index) {
@@ -568,7 +625,11 @@ async function showResults() {
 }
 
 // Load first exercise
-loadExercise(0);
+if (lessonData.hasTheory && !theoryShown) {
+    showTheory();
+} else {
+    loadExercise(0);
+}
 </script>
 
 <?php include 'includes/footer.php'; ?>
